@@ -23,7 +23,26 @@ const object_comp = (x: {}, z: {}) => {
     const propUno = x[propName];
     const propDos = z[propName];
     if (is_arr(propUno) && is_arr(propDos)) {
-      if (!arr_comp(propUno, propDos)) return false;
+      for (let j = 0; j < propUno.length; j++) {
+        console.log({
+          prop: propUno[j],
+          prop2: propDos[j],
+          is_arr: is_arr(propUno[j]),
+          is_arr2: is_arr(propDos[j])
+        });
+        if (
+          is_arr(propUno[j]) &&
+          is_arr(propDos[j]) &&
+          !arr_comp(propUno[j], propDos[j])
+        ) {
+          return false;
+        } else if (
+          !is_arr(propUno[j]) &&
+          !is_arr(propDos[j]) &&
+          !arr_comp(propUno, propDos)
+        )
+          return false;
+      }
     } else if (propUno.constructor == "Object" && propDos == "Object")
       if (!object_comp(propUno, propDos)) return false;
       else if (propUno !== propDos) return false;
@@ -33,7 +52,21 @@ const object_comp = (x: {}, z: {}) => {
 
 console.log(
   object_comp(
-    { x: 1, y: 2, arr: [1, 2, 3, 4] },
-    { x: 1, y: 2, arr: [1, 2, 3, 4] }
+    {
+      x: 1,
+      y: 2,
+      arr: [
+        [1, 2, 3, 4],
+        [1, 2, 3, 4]
+      ]
+    },
+    {
+      x: 1,
+      y: 2,
+      arr: [
+        [1, 2, 3, 4],
+        [1, 2, 3, 4]
+      ]
+    }
   )
 );
